@@ -1,0 +1,87 @@
+*{
+    margin: 0;
+    padding:0;
+    scroll-behavior: smooth;
+}
+
+.image_card{
+    width:100%;
+    height:auto;
+    background-color: #FFF9F9;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 8px rgba(36,36,36,.1);
+ 
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+.image_card:hover{
+    box-shadow: 0 0 10px rgba(36,36,36,.1);
+    
+}
+
+.image_card .image img{
+    position: relative;
+    
+    width: 100%;
+    overflow: hidden;
+
+    background-size: cover;
+    background-position: center;
+    
+
+}
+.image_card .badge-blue{
+    background-color: blue;
+    color: white;
+    padding:5px 10px;
+    border-radius: 8px;
+    position: absolute;
+    top:20px;
+    right: 20px;
+    font-size: 14px;
+    font-weight: 500;
+}
+.image_card .content{
+    padding: 20px;
+}
+.image_card .content .title h2{
+    
+    font-size: 25px;
+    font-weight: bold;
+    color: #000;
+    line-height: 35px;
+}
+
+.image_card .content .divider{
+    width:30%;
+    height:2px;
+    background-color: rgba(0,0,0,0.125);
+    margin:10px 0px;
+}
+
+.image_card .content .excerpt p{
+    margin:15px 0px;
+    font-size: 18px;
+    color: #333;
+    line-height: 24px;
+    font-weight: 400;
+}
+
+.image_card .content .read_more_btn a{
+  background: linear-gradient(45deg,blue,  #6d0aee); /* violet-blue gradient */
+  color: white;
+  border:  double #fff; /* violet-blue border */
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 35px;
+  text-decoration: none;;
+  cursor: pointer;
+  display: inline-block;
+  margin-top:20px;
+  transition: background 0.3s ease;
+}
+
+.image_card .content .read_more_btn a:hover{
+    background: linear-gradient(45deg, red, #e403d8);
+}
