@@ -267,6 +267,63 @@ class myEw_Preview_Card_Widget extends Widget_Base{
             ]
         );
 
+        
+
+        $this->add_control(
+            'button_icon',
+            [
+                'label' => esc_html__('Button Icon', 'plugin-name'),
+                'type' => \Elementor\Controls_Manager::ICONS,
+                'label_block' => true,
+                'default' => [
+                    'value' => 'fas fa-star',
+                    'library' => 'solid',
+                ],
+            ]
+        );
+
+        // Icon Position: Before or After
+        $this->add_control(
+            'button_icon_position',
+            [
+                'label' => esc_html__('Icon Position', 'plugin-name'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => 'before',
+                'options' => [
+                    'before' => esc_html__('Before Text', 'plugin-name'),
+                    'after' => esc_html__('After Text', 'plugin-name'),
+                ],
+                'condition' => [
+                    'button_icon[value]!' => '',
+                ],
+            ]
+        );
+
+        // Icon Spacing
+        $this->add_control(
+            'button_icon_spacing',
+            [
+                'label' => esc_html__('Icon Spacing', 'plugin-name'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'range' => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 50,
+                    ],
+                ],
+                'default' => [
+                    'size' => 10,
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .image_card .content .read_more_btn a .elementor-button-icon' => 'margin-{{button_icon_position}}: {{SIZE}}{{UNIT}};',
+                ],
+                'condition' => [
+                    'button_icon[value]!' => '',
+                ],
+            ]
+        );
+
+
         $this->end_controls_section();
 
         //style tabs
@@ -281,6 +338,35 @@ class myEw_Preview_Card_Widget extends Widget_Base{
             [
                 'label' => __('Image', 'my-elementor-widget'),
                 'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+            ]
+        );
+
+
+        // Image alignment control
+            $this->add_responsive_control(
+            'image_alignment',
+            [
+                'label' => esc_html__('Image Alignment', 'my-elementor-widget'),
+                'type' => \Elementor\Controls_Manager::CHOOSE,
+                'options' => [
+                    'left' => [
+                        'title' => esc_html__('Left', 'my-elementor-widget'),
+                        'icon' => 'eicon-text-align-left',
+                    ],
+                    'center' => [
+                        'title' => esc_html__('Center', 'my-elementor-widget'),
+                        'icon' => 'eicon-text-align-center',
+                    ],
+                    'right' => [
+                        'title' => esc_html__('Right', 'my-elementor-widget'),
+                        'icon' => 'eicon-text-align-right',
+                    ],
+                ],
+                'default' => 'center',
+                'selectors' => [
+                    '{{WRAPPER}} .image_card .image' => 'text-align: {{VALUE}};',
+                    '{{WRAPPER}} .image_card .image img' => 'display: inline-block;',
+                ],
             ]
         );
 
@@ -309,13 +395,13 @@ class myEw_Preview_Card_Widget extends Widget_Base{
 					'size' => 100,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .image_card .image' => 'width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .image_card .image img' => 'width: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
 
 
-       
+       // Height Control
 
 		$this->add_control(
 			'height',
@@ -349,7 +435,7 @@ class myEw_Preview_Card_Widget extends Widget_Base{
 			]
 		);
 
-		
+		// Image CSS filters control
 
 		$this->add_group_control(
 			\Elementor\Group_Control_Css_Filter::get_type(),
@@ -358,6 +444,26 @@ class myEw_Preview_Card_Widget extends Widget_Base{
 				'selector' => '{{WRAPPER}} .image_card .image',
 			]
 		);
+
+        // image object-fit control
+        $this->add_control(
+            'image_object_fit',
+            [
+                'label' => esc_html__('Object Fit', 'my-elementor-widget'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'default' => 'cover',
+                'options' => [
+                    'cover' => esc_html__('Cover', 'my-elementor-widget'),
+                    'contain' => esc_html__('Contain', 'my-elementor-widget'),
+                    'fill' => esc_html__('Fill', 'my-elementor-widget'),
+                    'none' => esc_html__('None', 'my-elementor-widget'),
+                    'scale-down' => esc_html__('Scale Down', 'my-elementor-widget'),
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .image_card .image img' => 'object-fit: {{VALUE}};',
+                ],
+            ]
+        );
 
         // Border Control
         $this->add_group_control(
@@ -383,6 +489,208 @@ class myEw_Preview_Card_Widget extends Widget_Base{
         );
 
 		$this->end_controls_section();
+
+
+        // Title Style section
+        $this->start_controls_section(
+            'title_style_section',
+            [
+                'label' => __('Title', 'my-elementor-widget'),
+                'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+            ]
+        );
+
+
+        // Title alignment control
+        $this->add_responsive_control(
+            'title_alignment',
+            [
+                'label' => esc_html__('Title Alignment', 'my-elementor-widget'),
+                'type' => \Elementor\Controls_Manager::CHOOSE,
+                'options' => [
+                    'left' => [
+                        'title' => esc_html__('Left', 'my-elementor-widget'),
+                        'icon' => 'eicon-text-align-left',
+                    ],
+                    'center' => [
+                        'title' => esc_html__('Center', 'my-elementor-widget'),
+                        'icon' => 'eicon-text-align-center',
+                    ],
+                    'right' => [
+                        'title' => esc_html__('Right', 'my-elementor-widget'),
+                        'icon' => 'eicon-text-align-right',
+                    ],
+                    'justify' => [
+                        'title' => esc_html__('Justify', 'my-elementor-widget'),
+                        'icon' => 'eicon-text-align-justify',
+                    ],
+                ],
+                'default' => 'left',
+                'selectors' => [
+                    '{{WRAPPER}} .image_card .content .title h2' => 'text-align: {{VALUE}};',
+                ],
+            ]
+        );
+
+        // Title typography control
+
+        $this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			[
+				'name' => 'content_typography',
+				'selector' => '{{WRAPPER}} .image_card .content .title h2',
+			]
+		);
+
+        // Title color control
+        $this->add_control(
+			'text_color',
+			[
+				'label' => esc_html__( 'Text Color', 'my-elementor-widget' ),
+				'type' => \Elementor\Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .image_card .content .title h2' => 'color: {{VALUE}}',
+				],
+			]
+		);
+
+        $this->end_controls_section();
+
+
+
+
+
+        // Excerpt Style Section
+       
+        $this->start_controls_section(
+            'excerpt_style_section',
+            [
+                'label' => __('Excerpt', 'my-elementor-widget'),
+                'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+            ]
+        );
+
+
+        // Title alignment control
+        $this->add_responsive_control(
+            'excerpt_alignment',
+            [
+                'label' => esc_html__('Text Alignment', 'my-elementor-widget'),
+                'type' => \Elementor\Controls_Manager::CHOOSE,
+                'options' => [
+                    'left' => [
+                        'title' => esc_html__('Left', 'my-elementor-widget'),
+                        'icon' => 'eicon-text-align-left',
+                    ],
+                    'center' => [
+                        'title' => esc_html__('Center', 'my-elementor-widget'),
+                        'icon' => 'eicon-text-align-center',
+                    ],
+                    'right' => [
+                        'title' => esc_html__('Right', 'my-elementor-widget'),
+                        'icon' => 'eicon-text-align-right',
+                    ],
+                    'justify' => [
+                        'title' => esc_html__('Justify', 'my-elementor-widget'),
+                        'icon' => 'eicon-text-align-justify',
+                    ],
+                ],
+                'default' => 'left',
+                'selectors' => [
+                    '{{WRAPPER}} .image_card .content .excerpt p' => 'text-align: {{VALUE}};',
+                ],
+            ]
+        );
+
+        // Excerpt typography control
+
+        $this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			[
+				'name' => 'excerpt_typography',
+				'selector' => '{{WRAPPER}} .image_card .content .excerpt p',
+			]
+		);
+
+        // Excerpt color control
+        $this->add_control(
+			'excerpt_color',
+			[
+				'label' => esc_html__( 'Text Color', 'my-elementor-widget' ),
+				'type' => \Elementor\Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .image_card .content .excerpt p' => 'color: {{VALUE}}',
+				],
+			]
+		);
+
+        $this->end_controls_section();
+
+        //Button Style Section
+        $this->start_controls_section(
+            'button_style_section',
+            [
+                'label' => __('Button', 'my-elementor-widget'),
+                'tab' => \Elementor\Controls_Manager::TAB_STYLE,
+            ]
+        );
+
+
+        // Button Alignment Control
+        $this->add_responsive_control(
+            'button_alignment',
+            [
+                'label' => __('Button Alignment', 'my-elementor-widget'),
+                'type' => \Elementor\Controls_Manager::CHOOSE,
+                'options' => [
+                    'left' => ['title' => __('Left', 'my-elementor-widget'), 'icon' => 'eicon-text-align-left'],
+                    'center' => ['title' => __('Center', 'my-elementor-widget'), 'icon' => 'eicon-text-align-center'],
+                    'right' => ['title' => __('Right', 'my-elementor-widget'), 'icon' => 'eicon-text-align-right'],
+                    'justify' => ['title' => __('Justify', 'my-elementor-widget'), 'icon' => 'eicon-text-align-justify'],
+                ],
+                'default' => 'left',
+                'selectors' => [
+                    '{{WRAPPER}} .image_card .content .read_more_btn' => 'text-align: {{VALUE}};',
+                ],
+            ]
+        );
+
+        // Text Color
+            $this->add_control(
+                'button_text_color',
+                [
+                    'label' => esc_html__('Text Color', 'plugin-name'),
+                    'type' => \Elementor\Controls_Manager::COLOR,
+                    'selectors' => [
+                        '{{WRAPPER}} ..image_card .content .read_more_btn a' => 'color: {{VALUE}};',
+                    ],
+                ]
+            );
+
+            // Background Color
+            $this->add_control(
+                'button_bg_color',
+                [
+                    'label' => esc_html__('Background Color', 'plugin-name'),
+                    'type' => \Elementor\Controls_Manager::COLOR,
+                    'selectors' => [
+                        '{{WRAPPER}} .image_card .content .read_more_btn a' => 'background-color: {{VALUE}};',
+                    ],
+                ]
+            );
+
+            // Typography
+            $this->add_group_control(
+                \Elementor\Group_Control_Typography::get_type(),
+                [
+                    'name' => 'button_typography',
+                    'selector' => '{{WRAPPER}} .image_card .content .read_more_btn a',
+                ]
+            );
+
+
+
+
     }
 
    
@@ -435,7 +743,7 @@ class myEw_Preview_Card_Widget extends Widget_Base{
             </div>
             <div class="read_more_btn">
                 <a href="<?php echo $button_link; ?>" class="btn btn-primary" <?php echo $button_link_target; ?> <?php echo $button_link_nofollow; ?>>
-                <?php echo $settings['button_text']; ?></a>
+                <?php echo $settings['button_text']; ?> <?php echo $settings['button_icon']; ?></a>
             </div>
         </div>
     </div>

@@ -12,7 +12,7 @@
     overflow: hidden;
     position: relative;
     box-shadow: 0 0 8px rgba(36,36,36,.1);
- 
+    position: relative;
     transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
 .image_card:hover{
@@ -20,15 +20,19 @@
     
 }
 
+.image_card .image{
+    text-align: center;
+ 
+}
+
 .image_card .image img{
-    position: relative;
     
+   
     width: 100%;
     overflow: hidden;
-
-    background-size: cover;
-    background-position: center;
-    
+    height:250px;
+    object-fit: cover;
+    display: inline-block;
 
 }
 .image_card .badge-blue{
@@ -47,7 +51,7 @@
 }
 .image_card .content .title h2{
     
-    font-size: 25px;
+
     font-weight: bold;
     color: #000;
     line-height: 35px;
