@@ -282,48 +282,7 @@ class myEw_Preview_Card_Widget extends Widget_Base{
             ]
         );
 
-        // Icon Position: Before or After
-        $this->add_control(
-            'button_icon_position',
-            [
-                'label' => esc_html__('Icon Position', 'plugin-name'),
-                'type' => \Elementor\Controls_Manager::SELECT,
-                'default' => 'before',
-                'options' => [
-                    'before' => esc_html__('Before Text', 'plugin-name'),
-                    'after' => esc_html__('After Text', 'plugin-name'),
-                ],
-                'condition' => [
-                    'button_icon[value]!' => '',
-                ],
-            ]
-        );
-
-        // Icon Spacing
-        $this->add_control(
-            'button_icon_spacing',
-            [
-                'label' => esc_html__('Icon Spacing', 'plugin-name'),
-                'type' => \Elementor\Controls_Manager::SLIDER,
-                'range' => [
-                    'px' => [
-                        'min' => 0,
-                        'max' => 50,
-                    ],
-                ],
-                'default' => [
-                    'size' => 10,
-                ],
-                'selectors' => [
-                    '{{WRAPPER}} .image_card .content .read_more_btn a .elementor-button-icon' => 'margin-{{button_icon_position}}: {{SIZE}}{{UNIT}};',
-                ],
-                'condition' => [
-                    'button_icon[value]!' => '',
-                ],
-            ]
-        );
-
-
+      
         $this->end_controls_section();
 
         //style tabs
@@ -688,6 +647,48 @@ class myEw_Preview_Card_Widget extends Widget_Base{
                 ]
             );
 
+            // Button Icon Color 
+            $this->add_control(
+                'button_icon_color',
+                [
+                    'label' => esc_html__('Icon Color', 'plugin-name'),
+                    'type' => \Elementor\Controls_Manager::COLOR,
+                    'selectors' => [
+                        '{{WRAPPER}} .read_more_btn a .elementor-button-icon' => 'color: {{VALUE}};',
+                    ],
+                ]
+            );
+
+
+            // Button Icon size 
+            $this->add_control(
+                'button_icon_size',
+                [
+                    'label' => esc_html__('Icon Size', 'plugin-name'),
+                    'type' => \Elementor\Controls_Manager::SLIDER,
+                    'size_units' => [ 'px', '%', 'em', 'rem' ],
+                    'range' => [
+                        'px' => [
+                            'min' => 0,
+                            'max' => 1000,
+                            'step' => 1,
+                        ],
+                        '%' => [
+                            'min' => 0,
+                            'max' => 100,
+                        ],
+                        
+                    ],
+                    'default' => [
+                        'unit' => 'px',
+                        'size' => 14,
+                    ],
+                    'selectors' => [
+                        '{{WRAPPER}} .read_more_btn a .elementor-button-icon' => 'font-size: {{SIZE}}{{UNIT}};',
+                    ],
+                ]
+            );
+
 
 
 
@@ -695,7 +696,8 @@ class myEw_Preview_Card_Widget extends Widget_Base{
 
    
     // Render function to display the widget content 
-        public function render() {
+    public function render() {
+
     $settings = $this->get_settings_for_display();
 
     // Prepare link attributes
@@ -719,6 +721,8 @@ class myEw_Preview_Card_Widget extends Widget_Base{
         $button_link = esc_url($settings['button_link']['url']);
     
 
+
+           
     ?>
     <div class="image_card">
         <div class="image" >
@@ -741,10 +745,29 @@ class myEw_Preview_Card_Widget extends Widget_Base{
             <div class="excerpt">
                 <p><?php echo $settings['excerpt']; ?></p>
             </div>
+
+           
+
             <div class="read_more_btn">
-                <a href="<?php echo $button_link; ?>" class="btn btn-primary" <?php echo $button_link_target; ?> <?php echo $button_link_nofollow; ?>>
-                <?php echo $settings['button_text']; ?> <?php echo $settings['button_icon']; ?></a>
+                <a href="<?php echo esc_url($button_link); ?>" <?php echo $button_link_target; ?> <?php echo $button_link_nofollow; ?>>
+                    <?php echo esc_html($settings['button_text']); ?>
+                     <?php
+                 $icon_html = '';
+
+            if ( ! empty( $settings['button_icon']['value'] ) ) {
+                \Elementor\Icons_Manager::enqueue_shim(); // ensures compatibility
+                $icon_html = '<span class="elementor-button-icon">';
+                $icon_html .= \Elementor\Icons_Manager::render_icon( $settings['button_icon'], [ 'aria-hidden' => 'true' ] );
+                $icon_html .= '</span>';
+            }
+            ?>
+                   
+                </a>
+
             </div>
+
+
+           
         </div>
     </div>
     <?php

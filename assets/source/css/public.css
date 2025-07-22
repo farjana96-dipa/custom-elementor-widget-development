@@ -89,3 +89,24 @@
 .image_card .content .read_more_btn a:hover{
     background: linear-gradient(45deg, red, #e403d8);
 }
+
+.image_card .content .read_more_btn a .elementor-button-icon {
+    margin-left: 8px;
+    font-size: 16px;
+    vertical-align: middle;
+}
+
+
+.dp-button-group button{
+    
+    color: white;
+    border: double #fff; /* violet-blue border */
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 35px;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 20px;
+    transition: background 0.3s ease;
+}
