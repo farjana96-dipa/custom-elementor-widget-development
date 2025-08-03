@@ -97,10 +97,11 @@
 }
 
 
-.dp-button-group button{
+/*
+.dp-button-group .dp-button{
     
     color: white;
-    border: double #fff; /* violet-blue border */
+    border: double #fff;
     padding: 12px 24px;
     font-size: 16px;
     border-radius: 35px;
@@ -109,4 +110,45 @@
     display: inline-block;
     margin-top: 20px;
     transition: background 0.3s ease;
+}
+
+.dp-button.style1{
+    background: linear-gradient(45deg, blue, #6d0aee); 
+    border: double #fff; 
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 35px;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 20px;
+    transition: background 0.3s ease;
+}
+
+.dp-button.style2{
+    background: linear-gradient(45deg, rgb(206, 3, 247), #c50194); 
+    border:none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 20px;
+    transition: background 0.3s ease;
+}
+
+*/
+
+.dp-button-group {
+    font-size:16px;
+    line-height: 30px;
+    font-weight: 500;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;   
+}
+
+.dp-button-group .dp-button {
+   padding: 12px 25px;
 }

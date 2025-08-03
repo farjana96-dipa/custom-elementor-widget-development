@@ -33,13 +33,29 @@ class DP_Button_Group extends Widget_Base {
             ]
         );
 
+        
+
         $repeater = new Repeater();
+
+        $repeater->add_control(
+            'button_style_preset',
+            [
+                'label' => esc_html__('Button Style', 'my-elementor-widget'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'options' => [
+                    'style1' => esc_html__('Style 1', 'my-elementor-widget'),
+                    'style2' => esc_html__('Style 2', 'my-elementor-widget'),
+                    'style3' => esc_html__('Style 3', 'my-elementor-widget'),
+                ],
+                'default' => 'style1',
+            ]
+        );
 
         $repeater->add_control(
             'button_text',
             [
                 'label' => esc_html__('Button Text', 'my-elementor-widget'),
-                'type' => Controls_Manager::TEXT,
+                'type' => \Elementor\Controls_Manager::TEXT,
                 'default' => esc_html__('Click Here', 'my-elementor-widget'),
             ]
         );
@@ -48,7 +64,7 @@ class DP_Button_Group extends Widget_Base {
             'button_link',
             [
                 'label' => esc_html__('Button Link', 'my-elementor-widget'),
-                'type' => Controls_Manager::URL,
+                'type' => \Elementor\Controls_Manager::URL,
             ]
         );
 
@@ -56,9 +72,9 @@ class DP_Button_Group extends Widget_Base {
             'button_background_color',
             [
                 'label' => esc_html__('Background Color', 'my-elementor-widget'),
-                'type' => Controls_Manager::COLOR,
+                'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} {{CURRENT_ITEM}} a' => 'background-color: {{VALUE}};',
+                    '{{WRAPPER}} {{CURRENT_ITEM}} .dp-button' => 'background-color: {{VALUE}};',
                 ],
             ]
         );
@@ -67,26 +83,84 @@ class DP_Button_Group extends Widget_Base {
             'button_text_color',
             [
                 'label' => esc_html__('Text Color', 'my-elementor-widget'),
-                'type' => Controls_Manager::COLOR,
+                'type' => \Elementor\Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} {{CURRENT_ITEM}} a' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} {{CURRENT_ITEM}} .dp-button' => 'color: {{VALUE}};',
                 ],
             ]
         );
 
+
         $repeater->add_control(
-           'button_font_size',
-           [
-            'label' => esc_html__('Font Size', 'my-elementor-widget'),
-            'type' => \Elementor\Controls_Manager::NUMBER,
-            'default' => 16,
-            'selectors' => [
-                '{{WRAPPER}} {{CURRENT_ITEM}} a' => 'font-size: {{VALUE}}px;',
+            'button_border_style',
+            [
+                'label' => esc_html__('Border Style', 'plugin-name'),
+                'type' => \Elementor\Controls_Manager::SELECT,
+                'options' => [
+                    'none' => 'None',
+                    'solid' => 'Solid',
+                    'dashed' => 'Dashed',
+                    'dotted' => 'Dotted',
+                    'double' => 'Double',
+                ],
+                'default' => 'solid',
+                'selectors' => [
+                    '{{WRAPPER}} {{CURRENT_ITEM}} .dp-button' => 'border-style: {{VALUE}};',
+                ],
             ]
-           ]
         );
 
-       
+
+
+        $repeater->add_control(
+            'button_border_width',
+            [
+                'label' => esc_html__('Border Width (px)', 'plugin-name'),
+                'type' => \Elementor\Controls_Manager::NUMBER,
+                'default' => 1,
+                'selectors' => [
+                    '{{WRAPPER}} {{CURRENT_ITEM}} .dp-button' => 'border-width: {{VALUE}}px;',
+                ],
+            ]
+        );
+
+
+
+
+        $repeater->add_control(
+            'border_color',
+            [
+                'label' => esc_html__('Border Color', 'my-elementor-widget'),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} {{CURRENT_ITEM}} .dp-button' => 'border-color: {{VALUE}};',
+                ]
+            ]
+        );
+
+        $repeater->add_control(
+            'border_radius',
+            [
+                'label' => esc_html__('Border Radius', 'my-elementor-widget'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => ['px', '%'],
+                'range' => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 100,
+                        'step' => 1,
+                    ],
+                    '%' => [
+                        'min' => 0,
+                        'max' => 100,
+                        'step' => 1,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} {{CURRENT_ITEM}} .dp-button' => 'border-radius: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
 
         $this->add_control(
             'button_list',
@@ -103,24 +177,27 @@ class DP_Button_Group extends Widget_Base {
     }
 
     public function render() {
-        $settings = $this->get_settings_for_display();
+    $settings = $this->get_settings_for_display();
 
-        if (!empty($settings['button_list'])) {
-            echo '<div class="dp-button-group">';
-            foreach ($settings['button_list'] as $item) {
-                $this->add_render_attribute('button-wrapper', 'class', 'elementor-repeater-item-' . esc_attr($item['_id']) . ' read_more_btn');
-                $this->add_render_attribute('button-link', 'href', esc_url($item['button_link']['url']));
-                $this->add_render_attribute('button-link', 'class', 'dp-button');
+    if (!empty($settings['button_list'])) {
+        echo '<div class="dp-button-group">';
+        
+        foreach ($settings['button_list'] as $index => $item) {
+    // Important: assign unique class for CURRENT_ITEM
+    $repeater_id = $item['_id']; // This is required to target CURRENT_ITEM
 
-                echo '<div ' . $this->get_render_attribute_string('button-wrapper') . '>';
-                echo '<a ' . $this->get_render_attribute_string('button-link') . '>';
-                echo esc_html($item['button_text']);
-                echo '</a>';
-                echo '</div>';
-            }
-            echo '</div>';
-        }
+    echo '<div class="elementor-repeater-item-' . esc_attr($repeater_id) . '">';
+    echo '<a href="' . esc_url($item['button_link']['url']) . '" class="dp-button">';
+    echo esc_html($item['button_text']);
+    echo '</a>';
+    echo '</div>';
+}
+
+
+        echo '</div>';
     }
+}
+
 }
 
 Plugin::instance()->widgets_manager->register(new DP_Button_Group());
