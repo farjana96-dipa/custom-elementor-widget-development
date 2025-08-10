@@ -282,6 +282,8 @@ class myEw_Preview_Card_Widget extends Widget_Base{
             ]
         );
 
+
+       
       
         $this->end_controls_section();
 
@@ -621,7 +623,7 @@ class myEw_Preview_Card_Widget extends Widget_Base{
                     'label' => esc_html__('Text Color', 'plugin-name'),
                     'type' => \Elementor\Controls_Manager::COLOR,
                     'selectors' => [
-                        '{{WRAPPER}} ..image_card .content .read_more_btn a' => 'color: {{VALUE}};',
+                        '{{WRAPPER}} .image_card .content .read_more_btn a' => 'color: {{VALUE}};',
                     ],
                 ]
             );
@@ -654,15 +656,18 @@ class myEw_Preview_Card_Widget extends Widget_Base{
                     'label' => esc_html__('Icon Color', 'plugin-name'),
                     'type' => \Elementor\Controls_Manager::COLOR,
                     'selectors' => [
-                        '{{WRAPPER}} .read_more_btn a .elementor-button-icon' => 'color: {{VALUE}};',
+                        '{{WRAPPER}} .read_more_btn .card-button  i' => 'color: {{VALUE}};',
+                        '{{WRAPPER}} .read_more_btn .card-button  svg path' => 'fill: {{VALUE}};',
                     ],
                 ]
             );
 
 
             // Button Icon size 
-            $this->add_control(
-                'button_icon_size',
+
+            $this->add_responsive_control(
+            
+            'button_icon_size',
                 [
                     'label' => esc_html__('Icon Size', 'plugin-name'),
                     'type' => \Elementor\Controls_Manager::SLIDER,
@@ -682,15 +687,55 @@ class myEw_Preview_Card_Widget extends Widget_Base{
                     'default' => [
                         'unit' => 'px',
                         'size' => 14,
+                        'width' => 20,
+                        'height' => 20,
                     ],
                     'selectors' => [
-                        '{{WRAPPER}} .read_more_btn a .elementor-button-icon' => 'font-size: {{SIZE}}{{UNIT}};',
+                        '{{WRAPPER}} .read_more_btn .card-button svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+                         '{{WRAPPER}} .read_more_btn .card-button  i' => 'font-size: {{SIZE}}{{UNIT}};',
+                    ],
+                ]
+        );
+
+            // Button Padding
+            $this->add_responsive_control(
+                'button_padding',
+                [
+                    'label' => esc_html__('Padding', 'plugin-name'),
+                    'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                    'size_units' => ['px', '%', 'em'],
+                    'selectors' => [
+                        '{{WRAPPER}} .image_card .content .read_more_btn a' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    ],
+                    'default' => [
+                        'top' => '10',
+                        'right' => '20',
+                        'bottom' => '10',
+                        'left' => '20',
+                        'unit' => 'px',
                     ],
                 ]
             );
 
-
-
+            // Button Margin
+            $this->add_responsive_control(
+                'button_margin',
+                [
+                    'label' => esc_html__('Margin', 'plugin-name'),
+                    'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                    'size_units' => ['px', '%', 'em'],
+                    'selectors' => [
+                        '{{WRAPPER}} .image_card .content .read_more_btn a' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    ],
+                    'default' => [
+                        'top' => '10',
+                        'right' => '20',
+                        'bottom' => '10',
+                        'left' => '20',
+                        'unit' => 'px',
+                    ],
+                ]
+            );
 
     }
 
@@ -749,18 +794,17 @@ class myEw_Preview_Card_Widget extends Widget_Base{
            
 
             <div class="read_more_btn">
-                <a href="<?php echo esc_url($button_link); ?>" <?php echo $button_link_target; ?> <?php echo $button_link_nofollow; ?>>
-                    <?php echo esc_html($settings['button_text']); ?>
-                     <?php
-                 $icon_html = '';
-
-            if ( ! empty( $settings['button_icon']['value'] ) ) {
-                \Elementor\Icons_Manager::enqueue_shim(); // ensures compatibility
-                $icon_html = '<span class="elementor-button-icon">';
-                $icon_html .= \Elementor\Icons_Manager::render_icon( $settings['button_icon'], [ 'aria-hidden' => 'true' ] );
-                $icon_html .= '</span>';
-            }
-            ?>
+                <a href="<?php echo esc_url($button_link); ?>" <?php echo $button_link_target; ?> <?php echo $button_link_nofollow; ?> class="card-button">
+                    <?php 
+                    echo esc_html($settings['button_text']); 
+                    
+                     if( !empty($settings['button_icon']['value'])){
+                           
+                            \Elementor\Icons_Manager::render_icon($settings['button_icon'], ['aria-hidden' => 'true']);
+                           
+                        }
+                    ?>
+                   
                    
                 </a>
 

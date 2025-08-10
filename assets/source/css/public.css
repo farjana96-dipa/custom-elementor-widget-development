@@ -152,3 +152,22 @@
 .dp-button-group .dp-button {
    padding: 12px 25px;
 }
+
+.dp-button svg{
+    font-size:16px;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+.read_more_btn .card-button svg{
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+.read_more_btn .card-button i{
+   font-size: 16px;
+    vertical-align: middle;
+    margin-left: 10px;
+}

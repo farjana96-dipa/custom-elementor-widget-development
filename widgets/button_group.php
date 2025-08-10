@@ -12,7 +12,7 @@ class DP_Button_Group extends Widget_Base {
     }
 
     public function get_icon() {
-        return 'eicon-button-group';
+        return 'eicon-button';
     }
 
     public function get_categories() {
@@ -162,6 +162,84 @@ class DP_Button_Group extends Widget_Base {
             ]
         );
 
+        // padding control
+        $repeater->add_control(
+            'button_padding',
+            [
+                'label' => esc_html__('Padding', 'my-elementor-widget'),
+                'type' => \Elementor\Controls_Manager::DIMENSIONS,
+                'size_units' => ['px', '%'],
+                'selectors' => [
+                    '{{WRAPPER}} {{CURRENT_ITEM}} .dp-button' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                ],
+                'default' => [
+                    'top' => '10',
+                    'right' => '20',
+                    'bottom' => '10',
+                    'left' => '20',
+                    'unit' => 'px',
+                ],
+            ]
+        );
+
+        // Button Icon
+        $repeater->add_control(
+            'button_icon',
+            [
+                'label' => esc_html__('Button Icon', 'my-elementor-widget'),
+                'type' => Controls_Manager::ICONS,
+                'default' => [
+                    'value' => 'fas fa-arrow-right',
+                    'library' => 'fa-solid',
+                ],
+                'label_block' => true
+                
+            ]
+        );
+
+        $repeater->add_responsive_control(
+            'icon_size',
+            [
+                'label' => esc_html__('Icon Size', 'plugin-name'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'range' => [
+                    'px' => [
+                        'min' => 8,
+                        'max' => 100,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .dp-button svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .dp-button i' => 'font-size: {{SIZE}}{{UNIT}};', // For fallback (font icons)
+                
+                ],
+                'default' => [
+                    
+                    'width' => 20,
+                    'height' => 20,
+                    'size' => 16,
+                    'unit' => 'px',
+                ],
+            ]
+        );
+
+
+
+
+
+$repeater->add_control(
+    'icon_color',
+    [
+        'label' => esc_html__('Icon Color', 'plugin-name'),
+        'type' => \Elementor\Controls_Manager::COLOR,
+        'selectors' => [
+            '{{WRAPPER}} .dp-button i' => 'color: {{VALUE}};',
+            '{{WRAPPER}} .dp-button svg path' => 'fill: {{VALUE}};', // For SVG icons
+        ],
+    ]
+);
+
+
         $this->add_control(
             'button_list',
             [
@@ -179,24 +257,33 @@ class DP_Button_Group extends Widget_Base {
     public function render() {
     $settings = $this->get_settings_for_display();
 
-    if (!empty($settings['button_list'])) {
+        if (!empty($settings['button_list'])) {
         echo '<div class="dp-button-group">';
         
-        foreach ($settings['button_list'] as $index => $item) {
-    // Important: assign unique class for CURRENT_ITEM
-    $repeater_id = $item['_id']; // This is required to target CURRENT_ITEM
+                foreach ($settings['button_list'] as $index => $item) {
+                // Important: assign unique class for CURRENT_ITEM
+                $repeater_id = $item['_id']; // This is required to target CURRENT_ITEM
 
-    echo '<div class="elementor-repeater-item-' . esc_attr($repeater_id) . '">';
-    echo '<a href="' . esc_url($item['button_link']['url']) . '" class="dp-button">';
-    echo esc_html($item['button_text']);
-    echo '</a>';
-    echo '</div>';
-}
+                echo '<div class="elementor-repeater-item-' . esc_attr($repeater_id) . '">';
+                echo '<a href="' . esc_url($item['button_link']['url']) . '" class="dp-button" >';
+                
+                echo esc_html($item['button_text']);
+                
+                if( !empty($item['button_icon']['value'])){
+                    echo '<span class="elementor-repeater-icon-'. esc_attr($repeater_id) . '">';
+                    \Elementor\Icons_Manager::render_icon($item['button_icon'], ['aria-hidden' => 'true']);
+                    echo '</span>';
+                }
+               
 
+            echo '</a>';
+            echo '</div>';
+        }
 
-        echo '</div>';
+            echo '</div>';
+        }
+
     }
-}
 
 }
 
