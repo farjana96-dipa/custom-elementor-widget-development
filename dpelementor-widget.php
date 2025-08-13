@@ -112,6 +112,9 @@
             require_once MY_ELEMENTOR_WIDGET_PATH . 'widgets/button_group.php';
             require_once MY_ELEMENTOR_WIDGET_PATH . 'widgets/heading.php';
             require_once MY_ELEMENTOR_WIDGET_PATH . 'widgets/image.php';
+            require_once MY_ELEMENTOR_WIDGET_PATH . 'widgets/text_editor.php';
+            require_once MY_ELEMENTOR_WIDGET_PATH . 'widgets/video.php';
+           
         }
 
 
