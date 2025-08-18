@@ -205,7 +205,7 @@ class DP_Video extends Widget_Base {
          //Image Overlay
 
     $this->start_controls_section(
-        'image_overlay',
+        'image_over',
         [
          'label' => esc_html__('Image Overlay','my-elementor-widget'),
          'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
@@ -217,25 +217,26 @@ class DP_Video extends Widget_Base {
             $this->add_control(
                 'image_overlay11',
                 [
-                'label' => __( 'Image Overlay', 'my-elementor-widget' ),
+                    'label' => __( 'Image Overlay', 'my-elementor-widget' ),
                     'type' => \Elementor\Controls_Manager::SWITCHER,
                     'default' => 'no',
                     
                 ]
             );
 
+           // Image Overlay Control
             $this->add_control(
-                'overlay_image',
+                'image_overlay',
                 [
                     'label' => __( 'Image Overlay', 'my-elementor-widget' ),
                     'type' => \Elementor\Controls_Manager::MEDIA,
                     'default' => [
                         'url' => \Elementor\Utils::get_placeholder_image_src(),
                     ],
+                    'description' => __( 'Select an image to show before playing the video.', 'my-elementor-widget' ),
                     'condition' => [
                         'image_overlay11' => 'yes'
-                    ],
-                    'description' => __( 'Select an image to show before playing the video.', 'my-elementor-widget' ),
+                    ]
                 ]
             );
 
@@ -250,16 +251,64 @@ class DP_Video extends Widget_Base {
                         'library' => 'solid',
                     ],
                     'description' => __( 'Select an icon for the play button overlay.', 'my-elementor-widget' ),
+                     'label_block' => true,
+                     'condition' => [
+                        'image_overlay11' => 'yes'
+                    ]
                 ]
             );
+
+
+            //Icon size 
+
+        $this->add_responsive_control(
+            'icon_size',
+            [
+                'label' => esc_html__('Icon Size', 'plugin-name'),
+                'type' => \Elementor\Controls_Manager::SLIDER,
+                'range' => [
+                    'px' => [
+                        'min' => 8,
+                        'max' => 100,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .dp-play-icon svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .dp-play-icon i' => 'font-size: {{SIZE}}{{UNIT}};', // For fallback (font icons)
+                
+                ],
+                'default' => [
+                    
+                    'width' => 20,
+                    'height' => 20,
+                    'size' => 16,
+                    'unit' => 'px',
+                ],
+            ]
+        );
+
+
+        //Icon Color
+
+        $this->add_control(
+            'icon_color',
+            [
+                'label' => esc_html__('Icon Color','my-elementor-widget'),
+                'type' => \Elementor\Controls_Manager::COLOR,
+                'default' => '#fff',
+                'selectors' => [
+                    '{{WRAPPER}} .dp-play-icon svg' => 'fill: {{VALUE}};',
+                    '{{WRAPPER}} .dp-play-icon i' => 'color: {{VALUE}};', // For fallback (font icons)
+                
+                ],
+            ]
+        );
+                    
                         
 
 
 
     $this->end_controls_section();
-
-         
-
 
 
             $this->style_tab();
@@ -276,6 +325,24 @@ class DP_Video extends Widget_Base {
             ]
         );
 
+       $this->add_control(
+        'aspect_ratio',
+        [
+            'label' => esc_html__('Aspect Ratio','my-elementor-widget'),
+            'type' => \Elementor\Controls_Manager::SELECT,
+            'options' => [
+                '1-1' => esc_html__('1:1','my-elementor-widget'),
+                '3-2' => esc_html__('3:2','my-elementor-widget'),
+                '4-3' => esc_html__('4:3','my-elementor-widget'),
+                '16-9' => esc_html__('16:9','my-elementor-widget'),
+                '21-9' => esc_html__('21:9','my-elementor-widget'),
+                '9-16' => esc_html__('9:16','my-elementor-widget'),
+
+            ],
+            'default' => '16-9'
+        ]
+    );
+
 
     $this->end_controls_section();
 
@@ -289,10 +356,11 @@ class DP_Video extends Widget_Base {
 public function render() {
     $settings = $this->get_settings_for_display();
 
-   
+    $ratio_class = 'aspect-ratio-' . $settings['aspect_ratio'];
     
     $image_url = !empty($settings['image_overlay']['url']) ? esc_url($settings['image_overlay']['url']) : '';
-    $icon_html = \Elementor\Icons_Manager::render_icon( $settings['play_icon'], [ 'aria-hidden' => 'true' ] );
+   
+   
 
     if ( $settings['video_source'] === 'youtube' && !empty($settings['youtube_url']) ) {
 
@@ -314,67 +382,156 @@ public function render() {
         }
 
 
-        echo '<div class="dp-video-wrapper">';
-        echo '<iframe width="100%" height="650px" autoplay="true" src="' . esc_url( $src ) . '" '. $lazy_attr .' frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
-        echo '</div>';
+            if ($image_url) {
+                 echo '<div class="dp-video-wrapper ' . esc_attr($ratio_class) . '">';
 
+                 echo '<iframe class="dp-video-iframe" width="100%" height="650" src="' . esc_url($src) . '" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+
+                echo '<div class="dp-video-overlay">';
+                    echo '<img src="' . esc_url($image_url) . '" alt="Video Thumbnail" class="dp-overlay-image" />';
+                    echo '<div class="dp-play-icon">';
+                        \Elementor\Icons_Manager::render_icon($settings['play_icon'], ['aria-hidden' => 'true']);
+                    echo '</div>';
+                echo '</div>';
+
+                echo '</div>';
+            }
+
+            else{
+                echo '<div class="dp-video-wrapper ' . esc_attr($ratio_class) . '">';
+                 echo '<iframe class="dp-video-iframe" width="100%" height="650" src="' . esc_url($src) . '" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+                echo '</div>';
+            }
+
+            
+
+            
     }
-
-     elseif ( $settings['video_source'] === 'vimeo' && ! empty( $settings['vimeo_url'] ) ) {
-        preg_match('/vimeo\.com\/([0-9]+)/', $settings['vimeo_url'], $matches);
-        $video_id = $matches[1] ?? '';
-        $autoplay = $settings['autoplay'] === 'yes' ? 1 : 0;
-        $mute     = $settings['mute'] === 'yes' ? 1 : 0;
-
-        $src = "https://player.vimeo.com/video/{$video_id}?autoplay={$autoplay}&muted={$mute}";
-
-        echo '<div class="dp-video-wrapper">';
-        echo '<iframe width="100%" height="500" src="' . esc_url( $src ) . '" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>';
-        echo '</div>';
-    }
-
-    elseif ( $settings['video_source'] === 'self' && ! empty( $settings['self_video']['url'] ) ) {
-        $autoplay_attr = $settings['autoplay'] === 'yes' ? 'autoplay' : '';
-        $mute_attr     = $settings['mute'] === 'yes' ? 'muted' : '';
-
-        echo '<div class="dp-video-wrapper">';
-        echo '<video ' . $autoplay_attr . ' ' . $mute_attr . ' controls playsinline>';
-        echo '<source src="' . esc_url( $settings['self_video']['url'] ) . '" type="video/mp4">';
-        echo __( 'Your browser does not support the video tag.', 'my-elementor-widget' );
-        echo '</video>';
-        echo '</div>';
-    }
+    elseif ( $settings['video_source'] === 'vimeo' && ! empty( $settings['vimeo_url'] ) ) {
+       preg_match('/vimeo\.com\/([0-9]+)/', $settings['vimeo_url'], $matches);
+       $video_id = $matches[1] ?? '';
+       $autoplay = $settings['autoplay'] === 'yes' ? 1 : 0;
+       $mute     = $settings['mute'] === 'yes' ? 1 : 0;
 
 
-        if ( $image_url ) {
-            echo '<div class="dp-video-overlay" data-video="' . $src . '">';
-            echo '<img src="' . $image_url . '" alt="Video Thumbnail" />';
-            echo '<div class="dp-play-icon">' . $icon_html . '</div>';
-            echo '</div>';
-        }
+       $src = "https://player.vimeo.com/video/{$video_id}?autoplay={$autoplay}&muted={$mute}";
+
+
+
+
+       if ( $image_url ) {
+           echo '<div class="dp-video-wrapper ' . esc_attr($ratio_class) . ' ">';
+          
+           echo '<iframe class="dp-video-iframe" width="100%" height="650px" autoplay="true" src="' . esc_url( $src ) . '" '. $lazy_attr .' frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+          
+           echo '<div class="dp-video-overlay ' . esc_attr($ratio_class) . '">';
+           echo '<img src="' . $image_url . '" alt="Video Thumbnail" class="overlay" />';
+           echo '<div class="dp-play-icon">' ;
+            \Elementor\Icons_Manager::render_icon($settings['play_icon'], ['aria-hidden' => 'true']);
+           echo '</div>';
+           echo '</div>';
+           echo '</div>';
+       }
+
+
+       else{
+            echo '<div class="dp-video-wrapper ' . esc_attr($ratio_class) . '">';
+           echo '<iframe class="dp-video-iframe" width="100%" height="650px" autoplay="true" src="' . esc_url( $src ) . '" '. $lazy_attr .' frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+           echo '</div>';
+       }
+
+
+    
+   }
+
+
+   elseif ( $settings['video_source'] === 'self' && ! empty( $settings['self_video']['url'] ) ) {
+       $autoplay_attr = $settings['autoplay'] === 'yes' ? 'autoplay' : '';
+       $mute_attr     = $settings['mute'] === 'yes' ? 'muted' : '';
+
+
+       $src = $settings['self_video']['url'];
+      
+       if ( $image_url ) {
+           echo '<div class="dp-video-wrapper ' . esc_attr($ratio_class) . ' ">';
+
+
+            echo '<video ' . $autoplay_attr . ' ' . $mute_attr . ' controls playsinline>';
+           echo '<source src="' . esc_url( $settings['self_video']['url'] ) . '" type="video/mp4">';
+           echo __( 'Your browser does not support the video tag.', 'my-elementor-widget' );
+           echo '</video>';
+
+
+
+
+           echo '<div class="dp-video-overlay ' . esc_attr($ratio_class) . '">';
+           echo '<img src="' . $image_url . '" alt="Video Thumbnail" class="overlay" />';
+           echo '<div class="dp-play-icon">' ;
+            \Elementor\Icons_Manager::render_icon($settings['play_icon'], ['aria-hidden' => 'true']);
+           echo '</div>';
+           echo '</div>';
+           echo '</div>';
+       }
+       else{
+           echo '<div class="dp-video-wrapper ' . esc_attr($ratio_class) . '">';
+           echo '<video ' . $autoplay_attr . ' ' . $mute_attr . ' controls playsinline>';
+           echo '<source src="' . esc_url( $settings['self_video']['url'] ) . '" type="video/mp4">';
+           echo __( 'Your browser does not support the video tag.', 'my-elementor-widget' );
+           echo '</video>';
+           echo '</div>';
+       }
+     
+
+
+   }
+
+
+     
+
+
 
 
 }
 
 
 }
-
-
 
     
     Plugin::instance()->widgets_manager->register(new DP_Video());
 
     ?>
 
-
 <script>
-document.addEventListener('click', function(e) {
-    if (e.target.closest('.dp-video-overlay')) {
-        const overlay = e.target.closest('.dp-video-overlay');
-        const videoUrl = overlay.getAttribute('data-video');
-        overlay.outerHTML = `<iframe width="100%" height="500" src="${src}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-    }
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".dp-video-wrapper").forEach(wrapper => {
+        const overlay = wrapper.querySelector(".dp-video-overlay");
+        const iframe = wrapper.querySelector(".dp-video-iframe");
+
+        //console.log("the video is loaded");
+
+        if (overlay && iframe) {
+            overlay.addEventListener("click", function () {
+                let src = iframe.getAttribute("src");
+
+                // Force autoplay & mute so browsers allow playback
+                src = src.replace("autoplay=0", "autoplay=1");
+                src = src.replace("muted=0", "muted=1");
+
+                if (!src.includes("autoplay=1")) {
+                    const joiner = src.includes("?") ? "&" : "?";
+                    src += joiner + "autoplay=1&mute=1";
+                }
+
+                iframe.setAttribute("src", src);
+
+                // Hide overlay
+                overlay.style.display = "none";
+                wrapper.classList.add("playing");
+            });
+        }
+    });
 });
+
 
 </script>
 
