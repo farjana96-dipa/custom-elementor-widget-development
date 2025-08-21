@@ -172,6 +172,9 @@
     margin-left: 10px;
 }
 
+
+
+/* ================== Video Widget ======================= */
 .dp-video-wrapper{
     position: relative;
     width:100%;
@@ -219,7 +222,6 @@
 
 
 
-/* Aspect Ratio Presets */
 .dp-video-wrapper.aspect-ratio-16-9 {
     padding-top: 56.25%; /* 9 / 16 */
 }
@@ -234,4 +236,143 @@
 
 .dp-video-wrapper.aspect-ratio-21-9 {
     padding-top: 42.85%; /* 9 / 21 */
+}
+
+
+
+/* =========================== Divider Widget ===================== */
+
+/* Base */
+.dp-divider{
+  --dp-divider-color:#222;
+  --dp-divider-thickness:2px;
+  --dp-divider-gap:12px;
+
+  display:flex;
+  align-items:center;
+  gap:var(--dp-divider-gap);
+  width:100%;
+}
+
+
+
+
+.dp-divider__line{
+  flex:1 1 auto;
+  height:0;            /* border-top draws the line */
+  border:0;
+  border-top: var(--dp-divider-thickness) solid var(--dp-divider-color);
+}
+
+.dp-divider__element{
+  display:inline-flex;
+  align-items:center;
+  line-height:1;
+}
+
+/* LINE STYLES */
+.dp-divider--style-solid   .dp-divider__line{ border-top-style: solid; }
+.dp-divider--style-double  .dp-divider__line{ border-top-style: double; }  /* needs thickness >= 3px to show nicely */
+.dp-divider--style-dotted  .dp-divider__line{ border-top-style: dotted; }
+.dp-divider--style-dashed  .dp-divider__line{ border-top-style: dashed; }
+
+/* PATTERN STYLES (examples) */
+
+
+.dp-divider--style-pattern .dp-divider__line {
+  height: var(--dp-divider-thickness, 2px);
+  background-color: transparent;
+  background-repeat: repeat-x;
+  background-position: center;
+  background-size: auto 100%;
+}
+
+/* Pattern: Dots */
+.dp-divider--style-pattern.dp-divider--pattern-dots .dp-divider__line{
+  /* dot size equals thickness */
+  background-image:
+    radial-gradient(circle, var(--dp-divider-color) 50%, transparent 51%);
+  background-size: calc(var(--dp-divider-thickness) * 2) var(--dp-divider-thickness);
+}
+
+/* Pattern: Half Rounds */
+.dp-divider--style-pattern.dp-divider--pattern-halves .dp-divider__line{
+  background-image:
+    radial-gradient(circle at 50% 0, var(--dp-divider-color) 99%, transparent 100%);
+  background-size: calc(var(--dp-divider-thickness) * 3) 100%;
+}
+
+/* Pattern: Arrow */
+.dp-divider--style-pattern.dp-divider--pattern-arrow .dp-divider__line {
+  background-image: 
+    linear-gradient(45deg, transparent 45%, var(--dp-divider-color, #000) 46%, var(--dp-divider-color, #000) 54%, transparent 55%);
+  background-size: 20px 100%;
+}
+
+/* Pattern: Plus */
+.dp-divider--style-pattern.dp-divider--pattern-plus .dp-divider__line {
+  background-image: 
+    radial-gradient(circle, var(--dp-divider-color, #000) 1px, transparent 1px),
+    radial-gradient(circle, var(--dp-divider-color, #000) 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+}
+
+/* Pattern: Star */
+.dp-divider--style-pattern.dp-divider--pattern-star .dp-divider__line {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20'><text x='0' y='15' font-size='16'>★</text></svg>");
+  background-size: 20px 20px;
+}
+
+/* Pattern: Dots */
+.dp-divider--style-pattern.dp-divider--pattern-dots .dp-divider__line {
+  background-image: radial-gradient(circle, var(--dp-divider-color, #000) 50%, transparent 51%);
+  background-size: calc(var(--dp-divider-thickness, 2px) * 2) calc(var(--dp-divider-thickness, 2px) * 2);
+}
+
+/* Pattern: Fir Tree */
+.dp-divider--style-pattern.dp-divider--pattern-fir .dp-divider__line {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><text x='0' y='14' font-size='14'>▲</text></svg>");
+  background-size: 18px 18px;
+}
+
+/* Pattern: Half Rounds */
+.dp-divider--style-pattern.dp-divider--pattern-halves .dp-divider__line {
+  background-image: radial-gradient(circle at 50% 0, var(--dp-divider-color, #000) 99%, transparent 100%);
+  background-size: calc(var(--dp-divider-thickness, 2px) * 3) 100%;
+}
+
+
+
+/* ==================== loop grid ================= */
+.dp-loop-grid{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+
+}
+
+.dipa-pagination{
+  width:100%;
+  
+  text-align: center;
+}
+
+.dipa-pagination .page-numbers{
+  padding:10px 15px;
+  border:1px solid #ddd;
+  color: #000;
+  font-weight: 500;
+}
+
+.dipa-pagination .page-numbers.current{
+  background-color: #e403d8;
+  color: #fff;
+  border-color: #e403d8;
+  font-weight: 700;
+
+}
+
+.dipa-pagination .page-numbers:hover{
+  background-color: antiquewhite;
+  color: #000;
 }

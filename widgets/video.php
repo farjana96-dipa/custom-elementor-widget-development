@@ -344,6 +344,16 @@ class DP_Video extends Widget_Base {
     );
 
 
+    // CSS Filters
+
+    $this->add_group_control(
+			\Elementor\Group_Control_Css_Filter::get_type(),
+			[
+				'name' => 'custom_css_filters',
+				'selector' => '{{WRAPPER}} .dp-video-iframe',
+			]
+		);
+
     $this->end_controls_section();
 
 
@@ -500,6 +510,13 @@ public function render() {
     Plugin::instance()->widgets_manager->register(new DP_Video());
 
     ?>
+
+
+
+
+
+
+
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {

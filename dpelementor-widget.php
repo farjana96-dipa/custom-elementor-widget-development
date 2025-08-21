@@ -114,6 +114,8 @@
             require_once MY_ELEMENTOR_WIDGET_PATH . 'widgets/image.php';
             require_once MY_ELEMENTOR_WIDGET_PATH . 'widgets/text_editor.php';
             require_once MY_ELEMENTOR_WIDGET_PATH . 'widgets/video.php';
+            require_once MY_ELEMENTOR_WIDGET_PATH . 'widgets/divider.php';
+            require_once MY_ELEMENTOR_WIDGET_PATH . 'widgets/loop_grid.php';
            
         }
 
